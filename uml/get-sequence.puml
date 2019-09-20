@@ -1,14 +1,14 @@
 @startuml
 title Todos los pedidos GET
 actor Cliente as U
-boundary endpoint as E
-control ruta as C
+boundary endpoint.js as E
+control control as C
 
 entity dbCaballos as D
 
-U -> E: HTTP GET (ruta,req)
+U -> E: HTTP GET (path,req)
 activate E
-E -> E: app.get(ruta, (req,res))
+E -> E: app.get(path, (req,res))
 activate E
 E -> C: getdatos(req)
 activate C

@@ -11,6 +11,7 @@ app.get('/datos', (req, res) => {
   res.type("json");
   var response = getdatos(req.query.aafe);
   res.end(response);
-});
+}
 
+// TODO: Generar respuestas 501 como placeholders.
 app.listen(port, () => console.log(`Escuchando en puerto ${port}!`))

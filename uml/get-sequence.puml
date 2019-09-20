@@ -1,0 +1,30 @@
+@startuml
+title Todos los pedidos GET
+actor Cliente as U
+boundary endpoint as E
+control ruta as C
+
+entity dbCaballos as D
+
+U -> E: HTTP GET (ruta,req)
+activate E
+E -> E: app.get(ruta, (req,res))
+activate E
+E -> C: getdatos(req)
+activate C
+C -> C: Generar query
+
+group MySQL driver
+C -> D: Connect
+C -> D: SQL SELECT
+D -> C: Resultados
+C -> C: Convertir en objeto
+end
+
+C --> E: Obj resultado
+deactivate C
+deactivate E
+E -> E: stringify(resultado)
+E --> U: res.end(resultado)
+deactivate E
+@enduml

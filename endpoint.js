@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
-const port = 80;
-const caballos = require('caballos.js')
+const port = 3000;
+const caballos = require('./caballos.js')
 
 // TODO: Reemplazar los 501 por funcionalidad
 
 app.get('/caballos', (req, res) => {
-  res.json(caballos.database); //Sólo para probar el devolver un objeto como JSON.
-  res.status(200).end();
+  caballos.base((database) => {
+      return res.status(200).json(database);
+  });
 });
 
 app.post('/caballos', (req, res) => {

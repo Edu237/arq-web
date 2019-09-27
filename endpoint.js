@@ -1,17 +1,42 @@
 const express = require('express');
 const app = express();
-const port = 80;
-const fs = require('fs');
+const port = 3000;
+const caballos = require('./caballos.js')
 
-function getdatos(aafe,result){
-  return fs.readFileSync('datos.json','utf-8');
-}
+// TODO: Reemplazar los 501 por funcionalidad
 
-app.get('/datos', (req, res) => {
-  res.type("json");
-  var response = getdatos(req.query.aafe);
-  res.end(response);
-}
+app.get('/caballos', (req, res) => {
+  caballos.base((database) => {
+      return res.status(200).json(database);
+  });
+});
 
-// TODO: Generar respuestas 501 como placeholders.
-app.listen(port, () => console.log(`Escuchando en puerto ${port}!`))
+app.post('/caballos', (req, res) => {
+  res.status(501).end();
+});
+
+app.put('/caballos', (req, res) => {
+  res.status(501).end();
+});
+
+app.get('/veterinaria', (req, res) => {
+  res.status(501).end();
+});
+
+app.put('/veterinaria', (req, res) => {
+  res.status(501).end();
+});
+
+app.get('/ventas', (req, res) => {
+  res.status(501).end();
+});
+
+app.post('/ventas', (req, res) => {
+  res.status(501).end();
+});
+
+app.put('/ventas', (req, res) => {
+  res.status(501).end();
+});
+
+app.listen(port, () => console.log(`Escuchando en puerto ${port}!`));

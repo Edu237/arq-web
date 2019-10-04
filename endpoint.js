@@ -6,8 +6,10 @@ const caballos = require('./caballos.js')
 // TODO: Reemplazar los 501 por funcionalidad
 
 app.get('/caballos', (req, res) => {
-  caballos.base((database) => {
-      return res.status(200).json(database);
+  caballos.base(req.query.aafe).then(function(result) {
+    res.status(200),json(result);
+  }, function(err){
+    res.status(err).send();
   });
 });
 

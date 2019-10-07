@@ -26,13 +26,17 @@ El siguiente diagrama muestra la secuencia de mensajes para un simple pedido GET
 
 ### Conversión de Mensajes
 
+Estos son algunos ejemplos de los mensajes SQL resultantes de algunos pedidos HTTP.
+
 |Método|Path|Query (`req.query`)|SQL (Resumida)|
 |:--|:--|:--|:--|
 |GET|/caballos|nro-aafe o nombre|SELECT * FROM caballos|
 |POST|/caballos|nro-aafe y pares clave-valor|UPDATE caballos SET|
 |PUT|/caballos|todos los pares clave-valor|INSERT INTO caballos VALUES|
-|GET|/veterinaria|nro-aafe|SELECT * FROM tratamientos JOIN caballos|
-|PUT|/veterinaria|todos los pares clave-valor|INSERT INTO tratamientos VALUES|
+|GET|/veterinaria|op=tratamiento, nro-aafe|SELECT * FROM tratamientos JOIN caballos|
+|PUT|/veterinaria|op=tratamiento, todos los pares clave-valor|INSERT INTO tratamientos VALUES|
+|GET|/veterinaria|op=embarazo, nro-aafe|SELECT * FROM embarazos JOIN caballos|
+|PUT|/veterinaria|op=embarazo, todos los pares clave-valor|INSERT INTO embarazos VALUES|
 |GET|/ventas|nro-aafe|SELECT * FROM ventas JOIN caballos|
 |POST|/ventas|nro-aafe y pares clave-valor|(previo SELECT) UPDATE ventas SET|
 |PUT|/ventas|todos los pares clave-valor|INSERT INTO ventas VALUES|

@@ -31,22 +31,22 @@ Estos son algunos ejemplos de los mensajes SQL resultantes de algunos pedidos HT
 |Método|Path|Query (`req.query`)|SQL (Resumida)|
 |:--|:--|:--|:--|
 |GET|/caballos|id|SELECT * FROM caballos|
-|POST|/caballos|id y pares clave-valor|UPDATE caballos SET|
-|PUT|/caballos|objeto caballo|INSERT INTO caballos VALUES|
+|PUT|/caballos|id y pares clave-valor|UPDATE caballos SET|
+|POST|/caballos|objeto caballo|INSERT INTO caballos VALUES|
 |GET|/veterinaria|op=tratamiento, id|SELECT * FROM tratamientos JOIN caballos|
-|PUT|/veterinaria|op=tratamiento, objeto tratamiento|INSERT INTO tratamientos VALUES|
+|POST|/veterinaria|op=tratamiento, objeto tratamiento|INSERT INTO tratamientos VALUES|
 |GET|/veterinaria|op=embarazo, id|SELECT * FROM embarazos JOIN caballos|
-|PUT|/veterinaria|op=embarazo, objeto embarazo|INSERT INTO embarazos VALUES|
+|POST|/veterinaria|op=embarazo, objeto embarazo|INSERT INTO embarazos VALUES|
 |GET|/ventas|id|SELECT * FROM ventas JOIN caballos|
-|POST|/ventas|id y pares clave-valor|(previo SELECT) UPDATE ventas SET|
-|PUT|/ventas|objeto venta|INSERT INTO ventas VALUES|
+|PUT|/ventas|id y pares clave-valor|(previo SELECT) UPDATE ventas SET|
+|POST|/ventas|objeto venta|INSERT INTO ventas VALUES|
 
 ### Estados
 
 |Situación|Nro|Descripción|
 |:--|:--|:--|
-|La solicitud GET o POST fue procesada con éxito.|200|OK|
-|La solicitud PUT fue procesada con éxito.|201|Created|
+|La solicitud GET o PUT fue procesada con éxito.|200|OK|
+|La solicitud POST fue procesada con éxito.|201|Created|
 |No fue posible conectarse a la base de datos.|503|Service Unavailable|
 |No se encontró la entrada en la base de datos.|410|Gone|
 |El método DELETE no es aceptado por la API.|405|Method Not Allowed|

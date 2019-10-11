@@ -23,7 +23,7 @@ exports.getCaballo = async function(id){
   })
 }
 
-exports.postCaballo = async function(params){
+exports.putCaballo = async function(params){
   return new Promise(function(resolve,reject){
     var caballo = await getCaballo(params.id).catch((err) => {reject(err)});
     var index = database.caballos.indexOf(caballo);
@@ -35,7 +35,7 @@ exports.postCaballo = async function(params){
   });
 }
 
-exports.putCaballo = async function(params){
+exports.postCaballo = async function(params){
   return new Promise(function(resolve,reject){
     if (!database) database = await fetchBase().catch((err) => {reject(err);});
     if (params.keys() == 6){
@@ -61,7 +61,7 @@ exports.getTratamiento = async function(id){
   })
 }
 
-exports.putTratamiento = async function(params){
+exports.postTratamiento = async function(params){
   return new Promise(function(resolve,reject){
     if (!database) database = await fetchBase().catch((err) => {reject(err);});
     if (params.keys() == 6){
@@ -87,7 +87,7 @@ exports.getEmbarazo = async function(id){
   })
 }
 
-exports.putTratamientos = async function(params){
+exports.postEmbarazo = async function(params){
   return new Promise(function(resolve,reject){
     if (!database) database = await fetchBase().catch((err) => {reject(err);});
     if (params.keys() == 6){

@@ -15,7 +15,7 @@ app.get('/caballos', (req, res) => {
 
 app.post('/caballos', (req, res) => {
   result = controller.postCaballo(req.query).then(function(result){
-    res.status(200),json(result);
+    res.status(201),json(result);
   }, function(err){
     res.status(err.numero).send(err.mensaje);
   });
@@ -47,17 +47,17 @@ app.get('/veterinaria', (req, res) => {
   else res.status(400).send("Faltan parámetros necesarios.");
 });
 
-app.put('/veterinaria', (req, res) => {
+app.post('/veterinaria', (req, res) => {
   if(req.query.op == "tratamiento"){
-    result = controller.putTratamiento(req.query.tratamiento).then(function(result){
-      res.status(200),json(result);
+    result = controller.postTratamiento(req.query.tratamiento).then(function(result){
+      res.status(201),json(result);
     }, function(err){
       res.status(err.numero).send(err.mensaje);
     });
   }
   else if(req.query.op == "embarazo"){
-    result = controller.getEmbarazo(req.query.tratamiento).then(function(result){
-      res.status(200),json(result);
+    result = controller.getEmbarazo(req.query.embarazo).then(function(result){
+      res.status(201),json(result);
     }, function(err){
       res.status(err.numero).send(err.mensaje);
     });

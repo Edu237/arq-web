@@ -180,5 +180,13 @@
       "madre": 7,
       "sustituta": 0
     }
+  ],
+  "tratamientos":[
+    {
+      "caballo": 9,
+      "fecha": [2019,10,5],
+      "procedimiento": "Drenaje Mano Izquierda",
+      "medicacion": "Antibióticos",
+    }
   ]
 }

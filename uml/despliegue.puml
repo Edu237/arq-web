@@ -5,36 +5,24 @@ interface HTTP
 component Express
 component Servicio
 artifact endpoint.js <<boundary>>
-artifact caballos.js <<control>>
-artifact veterinaria.js <<control>>
-artifact ventas.js <<control>>
-component "MySQL driver" as SQL
+artifact controller.js <<control>>
+component "filesystem" as fs
 }
 
 node "MySQL server" as MySQL {
 database dbCaballos <<entity>>
-artifact caballos <<tabla>>
-artifact embarazos <<tabla>>
-artifact tratamientos <<tabla>>
-artifact ventas <<tabla>>
+artifact datos.json <<tabla>>
 }
 
 HTTP -- Servicio
 Servicio <.. endpoint.js: <<manifests>>
 Express <.. endpoint.js: <<uses>>
 
-endpoint.js *-- caballos.js
-endpoint.js *-- veterinaria.js
-endpoint.js *-- ventas.js
+endpoint.js *-- controller.js
 
-caballos.js ..> SQL: <<uses>>
-veterinaria.js ..> SQL: <<uses>>
-ventas.js ..> SQL: <<uses>>
+controller.js ..> fs: <<uses>>
 
-SQL -0- dbCaballos: SQL
+fs -0- dbCaballos: SQL
 
-dbCaballos *-- caballos
-dbCaballos *-- embarazos
-dbCaballos *-- tratamientos
-dbCaballos *-- ventas
+dbCaballos <-- datos.json: <<manifests>>
 @enduml

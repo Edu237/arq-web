@@ -1,32 +1,68 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const caballos = require('./caballos.js')
+const controller = require('./controller.js')
 
 // TODO: Reemplazar los 501 por funcionalidad
 
 app.get('/caballos', (req, res) => {
-  caballos.base(req.query.aafe).then(function(result) {
+  result = controller.getCaballo(req.query.id).then(function(result){
     res.status(200),json(result);
   }, function(err){
-    res.status(err).send();
+    res.status(err.numero).send(err.mensaje);
   });
 });
 
 app.post('/caballos', (req, res) => {
-  res.status(501).end();
+  result = controller.postCaballo(req.query).then(function(result){
+    res.status(200),json(result);
+  }, function(err){
+    res.status(err.numero).send(err.mensaje);
+  });
 });
 
 app.put('/caballos', (req, res) => {
-  res.status(501).end();
+  result = controller.putCaballo(req.query).then(function(result){
+    res.status(200),json(result);
+  }, function(err){
+    res.status(err.numero).send(err.mensaje);
+  });
 });
 
 app.get('/veterinaria', (req, res) => {
-  res.status(501).end();
+  if(req.query.op == "tratamiento"){
+    result = controller.getTratamiento(req.query.id).then(function(result){
+      res.status(200),json(result);
+    }, function(err){
+      res.status(err.numero).send(err.mensaje);
+    });
+  }
+  else if(req.query.op == "embarazo"){
+    result = controller.getEmbarazo(req.query.id).then(function(result){
+      res.status(200),json(result);
+    }, function(err){
+      res.status(err.numero).send(err.mensaje);
+    });
+  }
+  else res.status(400).send("Faltan parámetros necesarios.");
 });
 
 app.put('/veterinaria', (req, res) => {
-  res.status(501).end();
+  if(req.query.op == "tratamiento"){
+    result = controller.putTratamiento(req.query.tratamiento).then(function(result){
+      res.status(200),json(result);
+    }, function(err){
+      res.status(err.numero).send(err.mensaje);
+    });
+  }
+  else if(req.query.op == "embarazo"){
+    result = controller.getEmbarazo(req.query.tratamiento).then(function(result){
+      res.status(200),json(result);
+    }, function(err){
+      res.status(err.numero).send(err.mensaje);
+    });
+  }
+  else res.status(400).send("Faltan parámetros necesarios.");
 });
 
 app.get('/ventas', (req, res) => {

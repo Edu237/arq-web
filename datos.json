@@ -5,105 +5,105 @@
       "sexo": "F",
       "nro-aafe": 538568,
       "pelaje": "Zaino",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 2,
       "nombre": "Baral Lucky Baby",
       "sexo": "F",
       "nro-aafe": 534201,
       "pelaje": "Alazan",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 3,
       "nombre": "Comedy Z",
       "sexo": "F",
       "nro-aafe": 0,
       "pelaje": "Zaino",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 4,
       "nombre": "Kappi All Times",
       "sexo": "F",
       "nro-aafe": 547199,
       "pelaje": "Tordillo",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 5,
       "nombre": "Arrebol Delicada",
       "sexo": "F",
       "nro-aafe": 532278,
       "pelaje": "Alazan",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 6,
       "nombre": "Top Esmeralda",
       "sexo": "F",
       "nro-aafe": 550724,
       "pelaje": "Alazan",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 7,
       "nombre": "Henry Jota Polonesa",
       "sexo": "F",
       "nro-aafe": 549502,
       "pelaje": "Alazan",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 8,
       "nombre": "3M Dublin",
       "sexo": "M",
       "nro-aafe": 538019,
       "pelaje": "Alazan",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 9,
       "nombre": "Grama Casspitol",
       "sexo": "M",
       "nro-aafe": 544214,
       "pelaje": "Tordillo",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 10,
       "nombre": "Nogoyá",
       "sexo": "F",
       "nro-aafe": 554758,
       "pelaje": "Alazan",
-      "embarazo": 1,
+      "embarazo": 1
     }, {
       "id": 11,
       "nombre": "Maciá",
       "sexo": "F",
       "nro-aafe": 0,
       "pelaje": "Zaino",
-      "embarazo": 1,
+      "embarazo": 1
     }, {
       "id": 12,
       "nombre": "Crespo",
       "sexo": "M",
       "nro-aafe": 0,
       "pelaje": "Zaino",
-      "embarazo": 2,
+      "embarazo": 2
     }, {
       "id": 13,
       "nombre": "Tala",
       "sexo": "M",
       "nro-aafe": 0,
       "pelaje": "Zaino",
-      "embarazo": 4,
+      "embarazo": 4
     }, {
       "id": 14,
       "nombre": "Victoria",
       "sexo": "F",
       "nro-aafe": 549443,
       "pelaje": "Zaino",
-      "embarazo": 0,
+      "embarazo": 0
     }, {
       "id": 15,
       "nombre": "Rosario II",
       "sexo": "F",
       "nro-aafe": 549158,
       "pelaje": "Tordillo",
-      "embarazo": 0,
+      "embarazo": 0
     }
   ],
   "embarazos":[
@@ -186,7 +186,7 @@
       "caballo": 9,
       "fecha": [2019,10,5],
       "procedimiento": "Drenaje Mano Izquierda",
-      "medicacion": "Antibióticos",
+      "medicacion": "Antibióticos"
     }
   ]
 }

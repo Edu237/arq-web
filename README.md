@@ -4,49 +4,29 @@
 
 - Eduardo Mitjans
 
-## Descripción
-
-El objetivo de esta aplicación es asistir con la gestión de animales en un campo cuyo negocio es la cría de caballos.
-El sistema debe llevar registro de la reproducción, nacimiento, tratamiento médico y venta de caballos.
-
-## Despliegue
-
-La interfaz será provista por el script `endpoint.js`, el cual utilizará Express.js para la comunicación via HTTP y el enrutamiento de los pedidos. Los pedidos, según el método HTTP y el path solicitado, serán atendidos por funciones en `caballos.js`, `veterinaria.js` y `ventas.js`. Cada uno de estos generará un mensaje SQL utilizará el driver MySQL para comunicarse con la base datos.
-
-![Diagrama de Despliegue](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Edu237/arq-web/master/uml/despliegue.puml)
-
-## Mensajes
-### Flujo Normal
-
-El path determinará qual control manejará la solicitud HTTP. Los argumentos del query determinarán qué datos se deben extraer, insertar o modificar en la base de datos. La conversión de argumentos en mensajes SQL y la de los resultados en objetos se realizarán en los controles; el primero como función del control y el segundo como parte del driver MySQL.
-
-El siguiente diagrama muestra la secuencia de mensajes para un simple pedido GET. La misma no cambia demasiado con otros pedidos. Sólo cambiará cuál control será llamado y qué queries generará.
-
-![Diagrama de Secuencia](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Edu237/arq-web/master/uml/get-sequence.puml)
-
 ### Conversión de Mensajes
 
 Estos son algunos ejemplos de los mensajes SQL resultantes de algunos pedidos HTTP.
 
-|Método|Path|Query (`req.query`)|SQL (Resumida)|
+|Método|Path|Query (`req.query`)|Respuesta
 |:--|:--|:--|:--|
-|GET|/caballos|id|SELECT * FROM caballos|
-|PUT|/caballos|id y pares clave-valor|UPDATE caballos SET|
-|POST|/caballos|objeto caballo|INSERT INTO caballos VALUES|
-|GET|/veterinaria|op=tratamiento, id|SELECT * FROM tratamientos JOIN caballos|
-|POST|/veterinaria|op=tratamiento, objeto tratamiento|INSERT INTO tratamientos VALUES|
-|GET|/veterinaria|op=embarazo, id|SELECT * FROM embarazos JOIN caballos|
-|POST|/veterinaria|op=embarazo, objeto embarazo|INSERT INTO embarazos VALUES|
-|GET|/ventas|id|SELECT * FROM ventas JOIN caballos|
-|PUT|/ventas|id y pares clave-valor|(previo SELECT) UPDATE ventas SET|
-|POST|/ventas|objeto venta|INSERT INTO ventas VALUES|
+|GET|/caballos|id|Objeto Caballo|
+|PUT|/caballos|id y pares clave-valor|Status 200|
+|POST|/caballos|objeto caballo|Status 200|
+|GET|/tratamiento|id|Objeto Tratamiento|
+|POST|/tratamiento|objeto tratamiento|Status 200|
+|GET|/embarazo|id|Status 200|
+|POST|/embarazo|objeto embarazo|Status 200|
+|GET|/ventas|id|Objeto Venta|
+|PUT|/ventas|id y pares clave-valor|Status 200|
+|POST|/ventas|objeto venta|Status 200|
+|GET|/caballo/nombres||Array con nombres de todos los caballos|
 
 ### Estados
 
 |Situación|Nro|Descripción|
 |:--|:--|:--|
-|La solicitud GET o PUT fue procesada con éxito.|200|OK|
-|La solicitud POST fue procesada con éxito.|201|Created|
+|La solicitud fue procesada con éxito.|200|OK|
 |No fue posible conectarse a la base de datos.|503|Service Unavailable|
 |No se encontró la entrada en la base de datos.|410|Gone|
 |El método DELETE no es aceptado por la API.|405|Method Not Allowed|

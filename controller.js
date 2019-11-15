@@ -10,6 +10,13 @@ exports.getItemById = function (database,table,id) {
   return database[table][id];
 }
 
+exports.getTratamientoByCaballo = function (database,id) {
+  if(!id) throw {status:400};
+  if(id >= database.caballos.length) throw {status:410};
+  let result = _.where(database.tratamientos,{caballo: Number(id)});
+  return result;
+}
+
 exports.isCaballo = function(input) {
   var keys = _.keys(input);
   var pred = _.every(keys, function(k) {

@@ -65,7 +65,7 @@ app.get('/caballo', (req,res) => {
   }
 });
 
-app.post('/caballo', (req, res,next) => {
+app.post('/caballo', (req, res, next) => {
   caballo = JSON.parse(req.query.nuevo);
   if (controller.isCaballo(caballo)){
     id = controller.postItem(database,"caballos",caballo);
@@ -77,7 +77,7 @@ app.post('/caballo', (req, res,next) => {
   }
 }, saveBase);
 
-app.put('/caballo', (req, res,next) => {
+app.put('/caballo', (req, res, next) => {
   try {
     controller.modCaballo(database,req.query);
     next();
@@ -87,6 +87,18 @@ app.put('/caballo', (req, res,next) => {
     logRes(err.status);
   }
 }, saveBase);
+
+app.get('/caballo/tratamiento', (req, res) => {
+  try {
+    result = controller.getTratamientoByCaballo(database,req.query.id);
+    res.status(200).json(result);
+    logRes(200,JSON.stringify(result));
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
+})
 
 app.get('/tratamiento', (req, res) => {
   try {
@@ -114,7 +126,7 @@ app.post('/tratamiento', (req, res, next) => {
 
 app.get('/embarazo', (req, res) => {
   try {
-    result = controller.getItemById(database,"embarazos",req.query);
+    result = controller.getItemById(database,"embarazos",req.query.id);
     res.status(200).json(result);
     logRes(200,JSON.stringify(result));
   }
@@ -182,6 +194,8 @@ app.put('/venta', (req, res, next) => {
   }
 }, saveBase);
 
-app.delete((req,res) => {res.status(403).end();});
+app.delete('/\*', (req,res) => {res.status(403).end();});
+
+app.use('/', express.static('frontend'))
 
 app.listen(port, () => console.log(`Escuchando en puerto ${port}!`));

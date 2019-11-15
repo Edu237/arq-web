@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Administración de Caballos</title>
+    <link rel="stylesheet" href="master.css">
+    <script type="text/javascript" src="client.js"></script>
+  </head>
+  <body>
+    <div class="container" id="lista-caballos">
+      <h1>Caballos</h1>
+      <table id="caballos">
+      </table>
+      <button onclick="fillCaballo('post')">Nuevo Caballo</button>
+    </div>
+    <div class="container" id="info-caballos">
+      <h1 id="nombre-caballo"></h1>
+      <table id="info">
+      </table>
+      <button onclick="fillCaballo('put')">Editar Caballo</button>
+    </div>
+    <div class="container" id="info-embarazos">
+      <h1>Datos de la Preñez</h1>
+      <table id="embarazo">
+      </table>
+      <button onclick="fillEmbarazo('put')"></button>
+    </div>
+
+    <!-- Formularios ocultos -->
+    <div id="editCaballo" class="container float">
+      <h1>Caballo</h1>
+      <form name="formCaballo" onsubmit="return saveCaballo()">
+        <table>
+          <tr><td>Nombre</td><td><input type="text" name="nombre"></input></td></tr>
+          <tr><td>Sexo</td><td><select name="sexo"><option value="M">Macho</option><option value="F">Hembra</option></select></input></td></tr>
+          <tr><td>Pelaje</td><td><input type="text" name="pelaje"></input></td></tr>
+          <tr><td>Número AAFE</td><td><input type="text" name="pelaje"></input></td></tr>
+          <tr><td>ID de Embarazo</td><td><input type="text" name="pelaje"></input></td></tr>
+        </table>
+        <input type="submit" value="Enviar"></input>
+      </form>
+      <button onclick="document.getElementById('editCaballo').style.display='none'">Cancelar</button>
+    </div>
+    <div id="editEmbarazo" class="container float">
+      <h1>Embarazo</h1>
+      <form name="formEmbarazo" onsubmit="return saveEmbarazo()">
+        <table>
+          <tr><td>Padre</td><td><select name="padre"></select></td></tr>
+          <tr><td>Madre</td><td><select name="madre"></select></td></tr>
+          <tr><td>Pelaje</td><td><select name="pelaje"></select></td></tr>
+          <tr><td>Fecha de Inseminación</td><td><input type="text" name="inseminacion" placeholder="0/0/0"></input></td></tr>
+          <tr><td>Fecha de Confirmación</td><td><input type="text" name="confirmacion" placeholder="0/0/0"></input></td></tr>
+          <tr><td>Fecha de Parto</td><td><input type="text" name="finalizacion" placeholder="0/0/0"></input></td></tr>
+        </table>
+        <input type="submit" value="Enviar"></input>
+      </form>
+      <button onclick="document.getElementById('editEmbarazo').style.display='none'">Cancelar</button>
+    </div>
+  </body>
+</html>

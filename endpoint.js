@@ -1,80 +1,201 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const controller = require('./controller.js')
+const fs = require('fs');
+var database = null;
+const controller = require('./controller.js');
 
 // TODO: Reemplazar los 501 por funcionalidad
 
-app.get('/caballos', (req, res) => {
-  result = controller.getCaballo(req.query.id).then(function(result){
-    res.status(200),json(result);
-  }, function(err){
-    res.status(err.numero).send(err.mensaje);
+function fetchBase(req,res,next){
+  console.log('Solicitud: '+req.method+' '+req.path+'\n'+'Query: '+JSON.stringify(req.query));
+  if (req.path == '/favicon.ico'){
+    res.status(404).end();
+    return;
+  }
+  try {
+    var plain = fs.readFileSync('datos.json');
+    database = JSON.parse(plain);
+    next();
+  }
+  catch (error) {
+    console.log('No se pudo leer la base de datos.\n'+error.message);
+    res.status(503).end();
+  }
+};
+
+function saveBase(req,res){
+  var data = JSON.stringify(database);
+  fs.writeFile('datos.json',data,(err) => {
+    if (err) {
+      console.log(err.message);
+      res.status(500).end();
+      logRes(500);
+    }
+    else {
+      console.log("Se guardó la base de datos con éxito!");
+      res.status(200).end();
+      logRes(200);}
   });
-});
+}
 
-app.post('/caballos', (req, res) => {
-  result = controller.postCaballo(req.query).then(function(result){
-    res.status(201),json(result);
-  }, function(err){
-    res.status(err.numero).send(err.mensaje);
-  });
-});
+function logRes(status,response){
+  console.log("Se respondió a la solicitud.");
+  console.log("Estado: "+status);
+  if (response) console.log("Mensaje:\n"+response);
+}
 
-app.put('/caballos', (req, res) => {
-  result = controller.putCaballo(req.query).then(function(result){
-    res.status(200),json(result);
-  }, function(err){
-    res.status(err.numero).send(err.mensaje);
-  });
-});
+app.use(fetchBase);
 
-app.get('/veterinaria', (req, res) => {
-  if(req.query.op == "tratamiento"){
-    result = controller.getTratamiento(req.query.id).then(function(result){
-      res.status(200),json(result);
-    }, function(err){
-      res.status(err.numero).send(err.mensaje);
-    });
+app.get('/caballo/nombres', (req,res) => {
+  nombres = controller.nombres(database);
+  res.status(200).json(nombres);
+  logRes(200,JSON.stringify(nombres));
+})
+
+app.get('/caballo', (req,res) => {
+  try {
+    result = controller.getItemById(database,"caballos",req.query.id);
+    res.status(200).json(result);
+    logRes(200,JSON.stringify(result));
   }
-  else if(req.query.op == "embarazo"){
-    result = controller.getEmbarazo(req.query.id).then(function(result){
-      res.status(200),json(result);
-    }, function(err){
-      res.status(err.numero).send(err.mensaje);
-    });
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
   }
-  else res.status(400).send("Faltan parámetros necesarios.");
 });
 
-app.post('/veterinaria', (req, res) => {
-  if(req.query.op == "tratamiento"){
-    result = controller.postTratamiento(req.query.tratamiento).then(function(result){
-      res.status(201),json(result);
-    }, function(err){
-      res.status(err.numero).send(err.mensaje);
-    });
+app.post('/caballo', (req, res, next) => {
+  caballo = JSON.parse(req.query.nuevo);
+  if (controller.isCaballo(caballo)){
+    id = controller.postItem(database,"caballos",caballo);
+    next();
   }
-  else if(req.query.op == "embarazo"){
-    result = controller.getEmbarazo(req.query.embarazo).then(function(result){
-      res.status(201),json(result);
-    }, function(err){
-      res.status(err.numero).send(err.mensaje);
-    });
+  else {
+    res.status(400).end();
+    logRes(400);
   }
-  else res.status(400).send("Faltan parámetros necesarios.");
+}, saveBase);
+
+app.put('/caballo', (req, res, next) => {
+  try {
+    controller.modCaballo(database,req.query);
+    next();
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
+}, saveBase);
+
+app.get('/caballo/tratamiento', (req, res) => {
+  try {
+    result = controller.getTratamientoByCaballo(database,req.query.id);
+    res.status(200).json(result);
+    logRes(200,JSON.stringify(result));
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
+})
+
+app.get('/tratamiento', (req, res) => {
+  try {
+    result = controller.getItemById(database,"tratamientos",req.query.id);
+    res.status(200).json(result);
+    logRes(200,JSON.stringify(result));
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
 });
 
-app.get('/ventas', (req, res) => {
-  res.status(501).end();
+app.post('/tratamiento', (req, res, next) => {
+  tratamiento = JSON.parse(req.query.nuevo);
+  if (controller.isCaballo(tratamiento)){
+    id = controller.postItem(database,"tratamientos",tratamiento);
+    next();
+  }
+  else {
+    res.status(400).end();
+    logRes(400);
+  }
+}, saveBase);
+
+app.get('/embarazo', (req, res) => {
+  try {
+    result = controller.getItemById(database,"embarazos",req.query.id);
+    res.status(200).json(result);
+    logRes(200,JSON.stringify(result));
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
 });
 
-app.post('/ventas', (req, res) => {
-  res.status(501).end();
+app.post('/embarazo', (req, res, next) => {
+  tratamiento = JSON.parse(req.query.nuevo);
+  if (controller.isCaballo(tratamiento)){
+    id = controller.postItem(database,"embarazos",tratamiento);
+    next();
+  }
+  else {
+    res.status(400).end();
+    logRes(400);
+  }
+}, saveBase);
+
+app.put('/embarazo', (req, res, next) => {
+  try {
+    controller.modEmbarazo(database,req.query);
+    next();
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
+}, saveBase);
+
+app.get('/venta', (req, res) => {
+  try {
+    result = controller.getItemById(database,"ventas",req.query.id);
+    res.status(200).json(result);
+    logRes(200,JSON.stringify(result));
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
 });
 
-app.put('/ventas', (req, res) => {
-  res.status(501).end();
-});
+app.post('/venta', (req, res, next) => {
+  venta = JSON.parse(req.query.nuevo);
+  if (controller.isCaballo(tratamiento)){
+    id = controller.postItem(database,"ventas",venta);
+    next();
+  }
+  else {
+    res.status(400).end();
+    logRes(400);
+  }
+}, saveBase);
+
+app.put('/venta', (req, res, next) => {
+  try {
+    controller.modVenta(database,req.query);
+    next();
+  }
+  catch (err) {
+    res.status(err.status).end()
+    logRes(err.status);
+  }
+}, saveBase);
+
+app.delete('/\*', (req,res) => {res.status(403).end();});
+
+app.use('/', express.static('frontend'))
 
 app.listen(port, () => console.log(`Escuchando en puerto ${port}!`));

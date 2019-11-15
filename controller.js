@@ -1,101 +1,90 @@
-// mysql = require('mysql');
-fs = require('fs');
-var database = null;
+const _ = require('underscore');
 
-// TODO: Reemplazar acceso a JSON con acceso a MySQL
-
-var fetchBase = new Promise(function(resolve,reject){
-  try {var plain = fs.readFileSync('datos.json');}
-  catch {reject({numero: 503, mensaje: "No se pudo acceder a la base de datos."})}
-  result = JSON.parse(plain);
-  resolve(result);
-});
-
-exports.getCaballo = async function(id){
-  return new Promise(function(resolve,reject){
-    if (!database) database = await fetchBase().catch((err) => {reject(err);});
-    if (!id) reject({numero: 400, mensaje:"Faltan parámetros necesarios."});
-    var result = null;
-    for (c in database.caballos){
-      if (c.id == id) resolve(c);
-    }
-    if (!result) reject({numero: 401, mensaje: "No se encontró la entrada en la base de datos."});
-  })
+exports.nombres = function (database) {
+  return _.pluck(database.caballos,"nombre");
 }
 
-exports.putCaballo = async function(params){
-  return new Promise(function(resolve,reject){
-    var caballo = await getCaballo(params.id).catch((err) => {reject(err)});
-    var index = database.caballos.indexOf(caballo);
-    for (key in params.keys()){
-      caballo[key] = param[key];
-    }
-    database.caballos[index] = caballo;
-    resolve(caballo);
+exports.getItemById = function (database,table,id) {
+  if(!id) throw {status:400};
+  if(id >= database[table].length) throw {status:410};
+  return database[table][id];
+}
+
+exports.getTratamientoByCaballo = function (database,id) {
+  if(!id) throw {status:400};
+  if(id >= database.caballos.length) throw {status:410};
+  let result = _.where(database.tratamientos,{caballo: Number(id)});
+  return result;
+}
+
+exports.isCaballo = function(input) {
+  var keys = _.keys(input);
+  var pred = _.every(keys, function(k) {
+    return ["nombre","sexo","nro-aafe","pelaje","embarazo"].indexOf(k) != -1;
   });
+  return pred;
 }
 
-exports.postCaballo = async function(params){
-  return new Promise(function(resolve,reject){
-    if (!database) database = await fetchBase().catch((err) => {reject(err);});
-    if (params.keys() == 6){
-      database.caballos.push(params);
-      resolve(params);
-    }
-    else {
-      reject({numero: 400, mensaje:"Faltan parámetros necesarios."});
-    }
+exports.isTratamiento = function(input) {
+  var keys = _.keys(input);
+  var pred = _.every(keys, function(k) {
+    return ["caballo","fecha","procedimiento","medicacion"].indexOf(k) != -1;
   });
+  return pred;
 }
 
-exports.getTratamiento = async function(id){
-  return new Promise(function(resolve,reject){
-    if (!database) database = await fetchBase().catch((err) => {reject(err);});
-    if (!id) reject({numero: 400, mensaje:"Faltan parámetros necesarios."});
-    var result = [];
-    for (t in database.tratamientos){
-      if (t.id == id) result.push(t);
-    }
-    if (!result) reject({numero: 401, mensaje: "No se encontró la entrada en la base de datos."})
-    else resolve(result);
-  })
-}
-
-exports.postTratamiento = async function(params){
-  return new Promise(function(resolve,reject){
-    if (!database) database = await fetchBase().catch((err) => {reject(err);});
-    if (params.keys() == 6){
-      database.tratamientos.push(params);
-      resolve(params);
-    }
-    else {
-      reject({numero: 400, mensaje:"Faltan parámetros necesarios."});
-    }
+exports.isVenta = function(input) {
+  var keys = _.keys(input);
+  var pred = _.every(keys, function(k) {
+    return ["caballo","cliente","precio","fecha"].indexOf(k) != -1;
   });
+  return pred;
 }
 
-exports.getEmbarazo = async function(id){
-  return new Promise(function(resolve,reject){
-    if (!database) database = await fetchBase().catch((err) => {reject(err);});
-    if (!id) reject({numero: 400, mensaje:"Faltan parámetros necesarios."});
-    var result = [];
-    for (e in database.embarazos){
-      if (e.id == id) result.push(t);
-    }
-    if (!result) reject({numero: 401, mensaje: "No se encontró la entrada en la base de datos."})
-    else resolve(result);
-  })
+exports.postItem = function(database,table,item){
+  var id = database[table].length;
+  database[table].push(item);
+  return id;
 }
 
-exports.postEmbarazo = async function(params){
-  return new Promise(function(resolve,reject){
-    if (!database) database = await fetchBase().catch((err) => {reject(err);});
-    if (params.keys() == 6){
-      database.embarazos.push(params);
-      resolve(params);
-    }
-    else {
-      reject({numero: 400, mensaje:"Faltan parámetros necesarios."});
-    }
+exports.modCaballo = function(database,params){
+  if(!params.id) throw {status:400};
+  if(params.id >= database.caballos.length) throw {status:410};
+  var keys = _.keys(params);
+  var store = _.filter(keys,function(key) {
+    let test = ["nombre","sexo","nro-aafe","pelaje","embarazo"].indexOf(key) != -1;
+    return test;
   });
+  if (store.length == 0) throw {status:400};
+  for (i in store) {
+    database.caballos[params.id][store[i]] = params[store[i]];
+  }
+}
+
+exports.modEmbarazo = function(database,params){
+  if(!params.id) throw {status:400};
+  if(params.id >= database.embarazos.length) throw {status:410};
+  var id = params.id;
+  var keys = _.keys(params);
+  var store = _.filter(keys,function (key) {
+    return ["caballo","fecha","procedimiento","medicacion"].indexOf(key) != -1;
+  });
+  if (store.length == 0) throw {status:400};
+  for (i in store) {
+    database.embarazos[id][store[i]] = params[store];
+  }
+}
+
+exports.modVenta = function(database,params){
+  if(!params.id) throw {status:400};
+  if(params.id >= database.ventas.length) throw {status:410};
+  var id = params.id;
+  var keys = _.keys(params);
+  var store = _.filter(keys,function (key) {
+    return ["caballo","cliente","precio","fecha"].indexOf(key) != -1;
+  });
+  if (store.length == 0) throw {status:400};
+  for (i in store) {
+    database.ventas[id][store[i]] = params[store];
+  }
 }
